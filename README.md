@@ -1,4 +1,4 @@
-![image](https://github.com/Tescoo/quizlet-match-game/assets/66729830/a1ae21ba-96e2-4b5c-ad52-f99a151368fc)# quizlet-match-game
+# quizlet-match-game
 Get top score in a Quizlet match game with this little script.
 
 # How to use?
