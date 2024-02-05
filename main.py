@@ -31,13 +31,16 @@ def ParsePowershellCommand(command:str) -> dict:
     findCookies = cookiePattern.findall(command)
 
     for cookie in findCookies:
-        name, value, _, _ = cookie.split(', ')
+        try:
+            name, value, _, _ = cookie.split(', ')
+        
+            # Yeah, there's probably a better way to do this. Don't care.
+            name = name.replace("\"", "").replace('(New-Object System.Net.Cookie(', "")
+            value = value.replace("\"", "").replace('))', "")
 
-        # Yeah, there's probably a better way to do this. Don't care.
-        name = name.replace("\"", "").replace('(New-Object System.Net.Cookie(', "")
-        value = value.replace("\"", "").replace('))', "")
-
-        cookies.append({"name": name.strip("'"), "value": value.strip("'")})
+            cookies.append({"name": name.strip("'"), "value": value.strip("'")})
+        except:
+            pass
 
     findHeaders = headerPattern.findall(command)
 
@@ -90,6 +93,8 @@ def GetClipboardData():
             value = text.value
             kernel32.GlobalUnlock(data_locked)
             return str(value.decode("utf-8"))
+        else:
+            return "image"
     finally:
         user32.CloseClipboard() # Stop reading clipboard
 
@@ -104,6 +109,7 @@ def CalculateScore(seconds:float) -> int:
 
 def main():
     # Spaghetti!
+    # While yes, you could do this without collecting the user's headers and cookies, seems probably easier
     print("[+] @rambletrick ~ Tescoo")
     print("[+] Quizlet matchgame high score... 'exploit'?\n")
     clipboard = GetClipboardData()
